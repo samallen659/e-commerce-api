@@ -2,10 +2,61 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Product {
+    id            String          @id @default(uuid())
+    name          String
+    quantity      Int
+    price         Int
+    description   String
+    Shopping_Item Shopping_Item[]
+    Order         Order[]
+}
+
+model User {
+    id               String            @id @default(uuid())
+    firstName        String
+    lastName         String
+    email            String            @unique
+    password         String
+    Shopping_session Shopping_Session?
+    Order            Order[]
+}
+
+model Shopping_Session {
+    id            String          @id @default(uuid())
+    user          User            @relation(fields: [userId], references: [id])
+    userId        String          @unique
+    createdAt     DateTime
+    modifiedAt    DateTime
+    Shopping_Item Shopping_Item[]
+}
+
+model Shopping_Item {
+    id         String           @id @default(uuid())
+    session    Shopping_Session @relation(fields: [sessionId], references: [id])
+    sessionId  String
+    product    Product          @relation(fields: [productId], references: [id])
+    productId  String
+    quantity   Int
+    createdAt  DateTime
+    modifiedAt DateTime
+}
+
+model Order {
+    id        Int      @id @default(autoincrement())
+    user      User     @relation(fields: [userId], references: [id])
+    userId    String
+    product   Product  @relation(fields: [productId], references: [id])
+    productId String
+    quantity  Int
+    price     Int
+    createAt  DateTime
 }
