@@ -4,7 +4,7 @@ import cors from "cors";
 import { userRouter } from "./routers/user";
 
 dotenv.config();
-const app = express();
+export const app = express();
 let port: number;
 if (process.env.NODE_ENV === "Development") {
 	port = 8080;
