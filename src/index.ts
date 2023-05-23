@@ -10,6 +10,10 @@ if (process.env.NODE_ENV === "Development") {
 	port = 443;
 }
 
+app.get("/", (req, res) => {
+	res.send("Welcome to the Samco shop");
+});
+
 app.listen(port, () => {
 	console.log(`App in ${process.env.NODE_ENV} environment, listening on port ${port}`);
 });
