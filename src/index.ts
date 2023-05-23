@@ -1,5 +1,6 @@
 import * as dotenv from "dotenv";
 import express from "express";
+import cors from "cors";
 
 dotenv.config();
 const app = express();
@@ -9,6 +10,8 @@ if (process.env.NODE_ENV === "Development") {
 } else {
 	port = 443;
 }
+
+app.use(cors());
 
 app.get("/", (req, res) => {
 	res.send("Welcome to the Samco shop");
