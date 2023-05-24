@@ -1,6 +1,7 @@
 import * as dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
+import bodyParser from "body-parser";
 import { userRouter } from "./routers/user";
 
 dotenv.config();
@@ -13,6 +14,8 @@ if (process.env.NODE_ENV === "Development") {
 }
 
 app.use(cors());
+app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
 
 app.use("/user", userRouter);
 
