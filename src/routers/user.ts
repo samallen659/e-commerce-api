@@ -1,8 +1,9 @@
 import express from "express";
 import { User } from "../types";
 import * as argon2 from "argon2";
-import { createUser } from "../db/user";
-import { hashPassword, isPasswordStrong } from "../auth/password";
+import { createUser, getUser, getUserPassword } from "../db/user";
+import { hashPassword, isPasswordStrong, verifyPassword } from "../auth/password";
+import { createJWT } from "../auth/jwt";
 
 export const userRouter = express.Router();
 
@@ -13,17 +14,43 @@ userRouter.post("/register", async (req, res) => {
 		const user = { firstName, lastName, email, isAdmin: false } as User;
 		const passwordHash = await hashPassword(password);
 		const createdUser = await createUser(user, passwordHash);
-		res.status(201).json({
+		const token = createJWT(user);
+		res.status(201).send({
 			message: "User created",
 			User: {
 				firstName: createdUser.firstName,
 				lastName: createdUser.lastName,
 				email: createdUser.email,
 			},
+			token: `Bearer ${token}`,
 		});
 	} else {
-		res.status(400).json({
+		res.status(400).send({
 			message: "Password does not meet the security requirements",
 		});
 	}
+});
+
+userRouter.post("/login", async (req, res) => {
+	const { email, password } = req.body;
+	if (email && password) {
+		const passwordHash = ((await getUserPassword(email)) as { password: string }).password;
+		if (passwordHash) {
+			if (await verifyPassword(passwordHash, password)) {
+				const user = await getUser(email);
+				if (user) {
+					const token = createJWT(user);
+					return res.status(200).send({
+						success: true,
+						message: "Logged in successfully",
+						token: `Bearer ${token}`,
+					});
+				}
+			}
+		}
+	}
+	return res.status(401).send({
+		success: false,
+		message: "fucked it",
+	});
 });
