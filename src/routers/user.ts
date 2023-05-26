@@ -1,9 +1,10 @@
 import express from "express";
 import { User } from "../types";
-import * as argon2 from "argon2";
 import { createUser, getUser, getUserPassword } from "../db/user";
 import { hashPassword, isPasswordStrong, verifyPassword } from "../auth/password";
 import { createJWT } from "../auth/jwt";
+import passport from "passport";
+import "../auth/passport";
 
 export const userRouter = express.Router();
 
@@ -59,5 +60,18 @@ userRouter.post("/login", async (req, res) => {
 		success: true,
 		message: "Logged in successfully",
 		token: `Bearer ${token}`,
+	});
+});
+
+userRouter.get("/detail", passport.authenticate("jwt", { session: false }), (req, res) => {
+	const user = req.user as User;
+	return res.status(200).send({
+		success: true,
+		user: {
+			firstName: user.firstName,
+			lastName: user.lastName,
+			email: user.email,
+			isAdmin: user.isAdmin,
+		},
 	});
 });
