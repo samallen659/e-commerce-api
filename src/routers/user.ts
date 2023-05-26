@@ -15,7 +15,7 @@ userRouter.post("/register", async (req, res) => {
 		const passwordHash = await hashPassword(password);
 		const createdUser = await createUser(user, passwordHash);
 		const token = createJWT(user);
-		res.status(201).send({
+		return res.status(201).send({
 			message: "User created",
 			User: {
 				firstName: createdUser.firstName,
@@ -24,33 +24,40 @@ userRouter.post("/register", async (req, res) => {
 			},
 			token: `Bearer ${token}`,
 		});
-	} else {
-		res.status(400).send({
-			message: "Password does not meet the security requirements",
-		});
 	}
+	return res.status(400).send({
+		message: "Password does not meet the security requirements",
+	});
 });
 
 userRouter.post("/login", async (req, res) => {
 	const { email, password } = req.body;
-	if (email && password) {
-		const passwordHash = ((await getUserPassword(email)) as { password: string }).password;
-		if (passwordHash) {
-			if (await verifyPassword(passwordHash, password)) {
-				const user = await getUser(email);
-				if (user) {
-					const token = createJWT(user);
-					return res.status(200).send({
-						success: true,
-						message: "Logged in successfully",
-						token: `Bearer ${token}`,
-					});
-				}
-			}
-		}
+	if (!email || !password) {
+		return res.status(401).send({
+			success: false,
+			message: "email and password fields required",
+		});
 	}
-	return res.status(401).send({
-		success: false,
-		message: "fucked it",
+
+	const user = await getUser(email);
+	if (!user) {
+		return res.status(401).send({
+			success: false,
+			message: "No user found with provided email",
+		});
+	}
+	const passwordHash = ((await getUserPassword(email)) as { password: string }).password;
+
+	if (!(await verifyPassword(passwordHash, password))) {
+		return res.status(401).send({
+			success: false,
+			message: "Incorrect password",
+		});
+	}
+	const token = createJWT(user);
+	return res.status(200).send({
+		success: true,
+		message: "Logged in successfully",
+		token: `Bearer ${token}`,
 	});
 });
