@@ -1,6 +1,6 @@
 import express from "express";
 import { User } from "../types";
-import { createUser, getUser, getUserPassword } from "../db/user";
+import { createUser, getUser, getUserPassword, setUserPassword } from "../db/user";
 import { hashPassword, isPasswordStrong, verifyPassword } from "../auth/password";
 import { createJWT } from "../auth/jwt";
 import passport from "passport";
@@ -73,5 +73,37 @@ userRouter.get("/detail", passport.authenticate("jwt", { session: false }), (req
 			email: user.email,
 			isAdmin: user.isAdmin,
 		},
+	});
+});
+
+userRouter.put("/update", passport.authenticate("jwt", { session: false }), async (req, res) => {
+	const user = req.user as User;
+	if (req.body.password) {
+		const { newPassword, oldPassword } = req.body.password;
+		const oldPasswordHash = ((await getUserPassword(user.email)) as { password: string }).password;
+
+		if (!(await verifyPassword(oldPasswordHash, oldPassword))) {
+			return res.status(401).send({
+				message: "Incorrect password",
+			});
+		}
+
+		if (!isPasswordStrong(newPassword)) {
+			return res.status(401).send({
+				message: "Password does not meet the security requirements",
+			});
+		}
+
+		const newPasswordHash = await hashPassword(newPassword);
+		setUserPassword(user.email, newPasswordHash);
+
+		return res.status(200).send({
+			success: true,
+			message: "Password updated",
+		});
+	}
+	res.status(401).send({
+		success: false,
+		message: "fucked it",
 	});
 });

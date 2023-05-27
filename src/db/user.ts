@@ -49,4 +49,15 @@ async function getAllUsers(): Promise<User[] | null> {
 	});
 }
 
-export { createUser, getUser, getUserPassword, getAllUsers };
+async function setUserPassword(email: string, password: string): Promise<User> {
+	return await db.user.update({
+		where: {
+			email: email,
+		},
+		data: {
+			password: password,
+		},
+	});
+}
+
+export { createUser, getUser, getUserPassword, getAllUsers, setUserPassword };
