@@ -84,12 +84,14 @@ userRouter.put("/update", passport.authenticate("jwt", { session: false }), asyn
 
 		if (!(await verifyPassword(oldPasswordHash, oldPassword))) {
 			return res.status(401).send({
+				success: true,
 				message: "Incorrect password",
 			});
 		}
 
 		if (!isPasswordStrong(newPassword)) {
 			return res.status(401).send({
+				success: true,
 				message: "Password does not meet the security requirements",
 			});
 		}
@@ -104,6 +106,6 @@ userRouter.put("/update", passport.authenticate("jwt", { session: false }), asyn
 	}
 	res.status(401).send({
 		success: false,
-		message: "fucked it",
+		message: "Invalid request",
 	});
 });
