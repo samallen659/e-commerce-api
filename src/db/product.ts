@@ -13,15 +13,19 @@ async function addProduct(product: Product): Promise<Product> {
 }
 
 async function getProduct(name: string): Promise<Product | null> {
-	return await db.product.findFirst({
+	return await db.product.findUnique({
 		where: {
 			name: name,
 		},
 	});
 }
 
-async function getAllProducts(): Promise<Product[]> {
-	return await db.product.findMany();
+async function getAllProducts(): Promise<{ name: string }[]> {
+	return await db.product.findMany({
+		select: {
+			name: true,
+		},
+	});
 }
 
 async function updateProductQuantity(name: string, quantityChange: number): Promise<Product | null> {
