@@ -3,7 +3,7 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import { userRouter } from "./routers/user";
-
+import { productRouter } from "./routers/product";
 dotenv.config();
 export const app = express();
 let port: number;
@@ -18,6 +18,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use("/user", userRouter);
+app.use("/product", productRouter);
 
 app.get("/", (req, res) => {
 	res.send("Welcome to the Samco shop");
