@@ -1,0 +1,41 @@
+{
+    "data": {
+        "users": [
+            {
+                "firstName": "admin",
+                "lastName": "admin",
+                "email": "admin@local.com",
+                "password": "Default2023!",
+                "isAdmin": "true"
+            },
+            {
+                "firstName": "Sam",
+                "lastName": "Allen",
+                "email": "sam@email.com",
+                "password": "Rosoterteeth666!",
+                "isAdmin": "false",
+            },
+            {
+                "firstName": "Christie",
+                "lastName": "Lee",
+                "email": "christie@email.com",
+                "password": "Slipknot696!",
+                "isAdmin": "false",
+            }
+        ],
+        "products": [
+            {
+                "name": "apple",
+                "quantity": "500",
+                "price": "0.25",
+                "description": "Its an apple",
+            },
+            {
+                "name": "orange",
+                "quantity": "250",
+                "price": "0.40",
+                "description": "Its an orange",
+            },
+        ],
+    },
+}
