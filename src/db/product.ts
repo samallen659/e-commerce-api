@@ -48,7 +48,7 @@ async function updateProductPrice(name: string, newPrice: number): Promise<Produ
 			name: name,
 		},
 		data: {
-			quantity: newPrice,
+			price: newPrice,
 		},
 	});
 }

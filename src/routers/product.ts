@@ -1,6 +1,6 @@
 import express from "express";
 import { Product, User } from "../types";
-import { getAllProducts, getProduct } from "../db/product";
+import { getAllProducts, getProduct, updateProductPrice, updateProductQuantity } from "../db/product";
 import passport from "passport";
 import { getUser } from "../db/user";
 import { addProduct } from "../db/product";
@@ -40,11 +40,43 @@ productRouter.post("/add", passport.authenticate("jwt", { session: false }), asy
 		});
 	}
 
-	const product = { name, quantity, price, description } as Product;
+	const product: Product = {
+		name,
+		quantity: Number(quantity),
+		price: Number(price),
+		description,
+	};
 	const returnedProduct = await addProduct(product);
 	res.status(201).send({
 		success: true,
 		message: "Product created",
 		product: returnedProduct,
+	});
+});
+
+productRouter.put("/update/:name", passport.authenticate("jwt", { session: false }), async (req, res) => {
+	const user = req.user as User;
+	if (!user.isAdmin) {
+		return res.status(401).send({
+			message: "Unauthorized",
+		});
+	}
+	let product = await getProduct(req.params.name);
+	if (!product) {
+		return res.status(401).send({
+			message: "Invalid product",
+		});
+	}
+	if (req.body.quantity) {
+		product = (await updateProductQuantity(product.name, Number(req.body.quantity))) as Product;
+	}
+	if (req.body.price) {
+		product = (await updateProductPrice(product.name, Number(req.body.price))) as Product;
+	}
+
+	return res.status(200).send({
+		success: true,
+		message: "Product update",
+		product: product,
 	});
 });
