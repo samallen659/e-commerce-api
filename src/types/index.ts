@@ -1,7 +1,7 @@
 type Product = {
 	name: string;
-	quantity: Number;
-	price: Number;
+	quantity: number;
+	price: number;
 	description: string;
 };
 type User = {
