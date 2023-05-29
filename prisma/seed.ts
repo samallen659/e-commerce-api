@@ -29,13 +29,13 @@ const products = [
 	{
 		name: "apple",
 		quantity: "500",
-		price: "1",
+		price: "0.2",
 		description: "Its an apple",
 	},
 	{
 		name: "orange",
 		quantity: "250",
-		price: "2",
+		price: "0.3",
 		description: "Its an orange",
 	},
 ];

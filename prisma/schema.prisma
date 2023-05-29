@@ -14,7 +14,7 @@ model Product {
     id          String      @id @default(uuid())
     name        String      @unique
     quantity    Int
-    price       Int
+    price       Float
     description String
     Cart_Item   Cart_Item[]
 }
