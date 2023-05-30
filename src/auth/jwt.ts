@@ -5,6 +5,7 @@ const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export function createJWT(user: User) {
 	const payload = {
+		id: user.id,
 		email: user.email,
 		firstName: user.firstName,
 		lastName: user.lastName,

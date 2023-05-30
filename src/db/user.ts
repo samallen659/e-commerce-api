@@ -19,6 +19,7 @@ async function getUser(email: string): Promise<User | null> {
 			email: email,
 		},
 		select: {
+			id: true,
 			firstName: true,
 			lastName: true,
 			email: true,

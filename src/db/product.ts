@@ -1,4 +1,4 @@
-import { Product } from "../types";
+import { Cart, Product } from "../types";
 import { db } from "./db";
 
 async function addProduct(product: Product): Promise<Product> {
@@ -20,6 +20,14 @@ async function getProduct(name: string): Promise<Product | null> {
 	});
 }
 
+async function getProductbyId(id: string): Promise<Product | null> {
+	return await db.product.findUnique({
+		where: {
+			id: id,
+		},
+	});
+}
+
 async function getAllProducts(): Promise<{ name: string }[]> {
 	return await db.product.findMany({
 		select: {
@@ -28,6 +36,13 @@ async function getAllProducts(): Promise<{ name: string }[]> {
 	});
 }
 
+async function getAllProductsByIds(ids: string[]): Promise<Cart> {
+	return await db.product.findMany({
+		where: {
+			id: { in: ids },
+		},
+	});
+}
 async function updateProductQuantity(name: string, quantityChange: number): Promise<Product | null> {
 	const product = await getProduct(name);
 	if (!product) return null;
@@ -53,4 +68,4 @@ async function updateProductPrice(name: string, newPrice: number): Promise<Produ
 	});
 }
 
-export { addProduct, getProduct, getAllProducts, updateProductQuantity, updateProductPrice };
+export { addProduct, getProduct, getAllProducts, updateProductQuantity, updateProductPrice, getProductbyId, getAllProductsByIds) };

@@ -68,6 +68,7 @@ userRouter.get("/detail", passport.authenticate("jwt", { session: false }), (req
 	return res.status(200).send({
 		success: true,
 		user: {
+			id: user.id,
 			firstName: user.firstName,
 			lastName: user.lastName,
 			email: user.email,

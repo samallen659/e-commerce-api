@@ -4,6 +4,7 @@ import { getAllProducts, getProduct, updateProductPrice, updateProductQuantity }
 import passport from "passport";
 import { getUser } from "../db/user";
 import { addProduct } from "../db/product";
+import { addCartItem } from "../db/cart";
 
 export const productRouter = express.Router();
 
@@ -25,7 +26,7 @@ productRouter.get("/detail/:name", async (req, res) => {
 	});
 });
 
-productRouter.post("/add", passport.authenticate("jwt", { session: false }), async (req, res) => {
+productRouter.post("/create", passport.authenticate("jwt", { session: false }), async (req, res) => {
 	const user = req.user as User;
 	if (!user.isAdmin) {
 		return res.status(401).send({
@@ -78,5 +79,21 @@ productRouter.put("/update/:name", passport.authenticate("jwt", { session: false
 		success: true,
 		message: "Product update",
 		product: product,
+	});
+});
+
+productRouter.post("/add", passport.authenticate("jwt", { session: false }), async (req, res) => {
+	const { productName, productQuantity } = req.body.name;
+	if (!productName || !productQuantity) {
+		return res.status(401).send({
+			message: "Fields name and quantity required",
+		});
+	}
+	const product = (await getProduct(productName)) as Product;
+	const user = req.user as User;
+
+	const cart = await addCartItem(user.id, product.id, Number(productQuantity as string));
+	res.status(201).send({
+		cart: cart,
 	});
 });
