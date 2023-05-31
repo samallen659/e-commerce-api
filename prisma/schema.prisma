@@ -11,12 +11,13 @@ datasource db {
 }
 
 model Product {
-    id          String      @id @default(uuid())
-    name        String      @unique
+    id          String        @id @default(uuid())
+    name        String        @unique
     quantity    Int
     price       Float
     description String
     Cart_Item   Cart_Item[]
+    Order_Items Order_Items[]
 }
 
 model User {
@@ -27,6 +28,7 @@ model User {
     password  String
     isAdmin   Boolean
     Cart_Item Cart_Item[]
+    Order     Order[]
 }
 
 model Cart_Item {
@@ -38,4 +40,21 @@ model Cart_Item {
     quantity   Int
     createdAt  DateTime @default(now())
     modifiedAt DateTime @updatedAt
+}
+
+model Order {
+    id          String        @id @default(uuid())
+    user        User          @relation(fields: [userId], references: [id])
+    userId      String
+    total       Float
+    createAt    DateTime      @default(now())
+    Order_Items Order_Items[]
+}
+
+model Order_Items {
+    id        String  @id @default(uuid())
+    order     Order   @relation(fields: [orderId], references: [id])
+    orderId   String
+    product   Product @relation(fields: [productId], references: [id])
+    productId String
 }
