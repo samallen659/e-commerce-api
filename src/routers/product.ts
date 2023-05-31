@@ -41,7 +41,7 @@ productRouter.post("/create", passport.authenticate("jwt", { session: false }), 
 		});
 	}
 
-	const product: Product = {
+	const product = {
 		name,
 		quantity: Number(quantity),
 		price: Number(price),

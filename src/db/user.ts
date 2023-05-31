@@ -42,6 +42,7 @@ async function getUserPassword(email: string): Promise<{ password: string } | nu
 async function getAllUsers(): Promise<User[] | null> {
 	return await db.user.findMany({
 		select: {
+			id: true,
 			firstName: true,
 			lastName: true,
 			email: true,

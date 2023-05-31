@@ -1,7 +1,12 @@
 import { Cart, Product } from "../types";
 import { db } from "./db";
 
-async function addProduct(product: Product): Promise<Product> {
+async function addProduct(product: {
+	name: string;
+	quantity: number;
+	price: number;
+	description: string;
+}): Promise<Product> {
 	return await db.product.create({
 		data: {
 			name: product.name,
@@ -36,7 +41,7 @@ async function getAllProducts(): Promise<{ name: string }[]> {
 	});
 }
 
-async function getAllProductsByIds(ids: string[]): Promise<Cart> {
+async function getAllProductsByIds(ids: string[]) {
 	return await db.product.findMany({
 		where: {
 			id: { in: ids },
@@ -68,4 +73,12 @@ async function updateProductPrice(name: string, newPrice: number): Promise<Produ
 	});
 }
 
-export { addProduct, getProduct, getAllProducts, updateProductQuantity, updateProductPrice, getProductbyId, getAllProductsByIds) };
+export {
+	addProduct,
+	getProduct,
+	getAllProducts,
+	updateProductQuantity,
+	updateProductPrice,
+	getProductbyId,
+	getAllProductsByIds,
+};

@@ -1,12 +1,12 @@
 type Product = {
-	id?: string;
+	id: string;
 	name: string;
 	quantity: number;
 	price: number;
 	description: string;
 };
 type User = {
-	id?: string;
+	id: string;
 	firstName: string;
 	lastName: string;
 	email: string;
