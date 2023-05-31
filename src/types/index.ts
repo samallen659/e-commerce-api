@@ -18,4 +18,11 @@ type Cart = {
 	products: Product[];
 };
 
-export { Product, User, Cart };
+type Order = {
+	id: string;
+	userId: string;
+	createdAt: Date;
+	total: number;
+};
+
+export { Product, User, Cart, Order };
