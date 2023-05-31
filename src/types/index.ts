@@ -11,11 +11,21 @@ type User = {
 	lastName: string;
 	email: string;
 	isAdmin: boolean;
-	basket?: Cart;
+	cart?: Cart;
 };
 
 type Cart = {
 	products: Product[];
+};
+
+type Cart_Item = {
+	id: string;
+	userId: string;
+	productId: string;
+	quantity: number;
+	createdAt: Date;
+	modifiedAt: Date;
+	product: Product;
 };
 
 type Order = {
@@ -25,4 +35,4 @@ type Order = {
 	total: number;
 };
 
-export { Product, User, Cart, Order };
+export { Product, User, Cart, Order, Cart_Item };
