@@ -1,8 +1,8 @@
 import { db } from "./db";
-import { Cart } from "../types";
+import { Cart, Cart_Item } from "../types";
 import { getAllProductsByIds } from "./product";
 
-async function getCartContents(userId: string) {
+async function getCartContents(userId: string): Promise<Cart_Item[] | null> {
 	return await db.cart_Item.findMany({
 		where: {
 			userId: userId,

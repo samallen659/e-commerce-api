@@ -83,7 +83,8 @@ productRouter.put("/update/:name", passport.authenticate("jwt", { session: false
 });
 
 productRouter.post("/add", passport.authenticate("jwt", { session: false }), async (req, res) => {
-	const { productName, productQuantity } = req.body.name;
+	const productName = req.body.name;
+	const productQuantity = req.body.quantity;
 	if (!productName || !productQuantity) {
 		return res.status(401).send({
 			message: "Fields name and quantity required",

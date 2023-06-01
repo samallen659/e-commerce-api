@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import { userRouter } from "./routers/user";
 import { productRouter } from "./routers/product";
 import { cartRouter } from "./routers/cart";
+import { orderRouter } from "./routers/order";
 dotenv.config();
 export const app = express();
 let port: number;
@@ -21,6 +22,7 @@ app.use(bodyParser.json());
 app.use("/user", userRouter);
 app.use("/product", productRouter);
 app.use("/cart", cartRouter);
+app.use("/orders", orderRouter);
 
 app.get("/", (req, res) => {
 	res.send("Welcome to the Samco shop");
