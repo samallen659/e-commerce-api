@@ -92,8 +92,12 @@ productRouter.post("/add", passport.authenticate("jwt", { session: false }), asy
 	}
 	const product = (await getProduct(productName)) as Product;
 	const user = req.user as User;
-
-	const cart = await addCartItem(user.id, product.id, Number(productQuantity as string));
+	if (productQuantity < Number(productQuantity)) {
+		return res.status(401).send({
+			message: "Insufficient stock",
+		});
+	}
+	const cart = await addCartItem(user.id, product.id, Number(productQuantity));
 	res.status(201).send({
 		cart: cart,
 	});
