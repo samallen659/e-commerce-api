@@ -38,7 +38,7 @@ async function addOrder(cart: Cart_Item[], total: number, userId: string) {
 		},
 	});
 	const orderItemsData = productIds.map((id) => ({ orderId: order.id, productId: id }));
-	const orderItems = await db.order_Items.createMany({
+	await db.order_Items.createMany({
 		data: orderItemsData,
 	});
 	await db.cart_Item.deleteMany({
